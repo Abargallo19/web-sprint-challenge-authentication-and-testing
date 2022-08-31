@@ -4,19 +4,17 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'shh';
 const auth = require('../auth/auth-model');
 const restrict = require('../middleware/restricted')
-const {CheckUsernameExists,
-  UsernameIsUnique,
-  CheckPassword,} = require('../middleware/validate');
+const { CheckUsernameExists, UsernameIsUnique, validateLogin } = require('../middleware/validate');
 
 
 
 
-router.post('/register', async (req, res) => {
-try {
-  const 
-} catch (error) {
-  
-}
+router.post('/register', validateLogin, UsernameIsUnique, async (req, res) => {
+  try {
+    
+  } catch (error) {
+
+  }
 
 
   res.end('implement register, please!');
@@ -47,7 +45,7 @@ try {
   */
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', restrict, validateLogin, CheckUsernameExists, async (req, res) => {
   res.end('implement login, please!');
   /*
     IMPLEMENT
