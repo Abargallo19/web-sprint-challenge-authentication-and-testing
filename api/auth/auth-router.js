@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'shh';
 const auth = require('../auth/auth-model');
-//const restrict = require('../middleware/restricted')
 const { uniqueUsername, shape } = require('../middleware/validate');
 
 
@@ -21,7 +20,6 @@ router.post('/register', uniqueUsername, shape, async (req, res, next) => {
   }
 });
 
-// res.end('implement register, please!');
 /*
   IMPLEMENT
   You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -65,22 +63,6 @@ router.post('/login', shape, async (req, res, next) => {
   }
 
 });
-
-
-// try {
-//   const { username, password } = req.user;
-//   const invalid = { message: 'invalid credentials' };
-//   let result = await authMod.findBy({ username });
-//   if (!result || !bcryptjs.compareSync(password, result.password)) return res.status(404).json(invalid);
-//   const token = newToken(req.user);
-//   res.json({
-//     token,
-//     message: `welcome, ${username}`
-//   })
-// } catch (err) {
-//   next(err)
-// }
-
 
 /*
   IMPLEMENT
