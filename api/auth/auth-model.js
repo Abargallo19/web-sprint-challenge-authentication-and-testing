@@ -11,8 +11,8 @@ return db('users').where(filter);
 //.first()
 }
 
-function findById(user_id) {
-    return db('users').where({ user_id }).first();
+function findById(id) {
+    return db('users').where({ id }).first();
 }
 
 async function create(user) {

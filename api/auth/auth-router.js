@@ -1,6 +1,24 @@
 const router = require('express').Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'shh';
+const auth = require('../auth/auth-model');
+const restrict = require('../middleware/restricted')
+const {CheckUsernameExists,
+  UsernameIsUnique,
+  CheckPassword,} = require('../middleware/validate');
 
-router.post('/register', (req, res) => {
+
+
+
+router.post('/register', async (req, res) => {
+try {
+  const 
+} catch (error) {
+  
+}
+
+
   res.end('implement register, please!');
   /*
     IMPLEMENT

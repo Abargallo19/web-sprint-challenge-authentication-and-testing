@@ -15,6 +15,7 @@ module.exports = (req, res, next) => {
       res.json({ status: 401, message: 'Token invalid' });
       return;
     }
+    req.jwt = token
     next();
   })
 };
