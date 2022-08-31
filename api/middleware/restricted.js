@@ -5,7 +5,11 @@ const JWT_SECRET = process.env.JWT_SECRET || 'shh';
 
 
 module.exports = (req, res, next) => {
+const { authorization } = req.headers;
 
+if(!authorization) {
+  res.json ({status: 401, message: "token required"})
+}
 
 
 

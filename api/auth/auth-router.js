@@ -56,7 +56,7 @@ router.post('/login', (req, res) => {
   */
 
 
-  res.status(200).json({message: `Welcome, ${req.body.us}`})
+  // res.status(200).json({message: `Welcome, ${req.body.username}`, token: token})
 });
 
 module.exports = router;
