@@ -8,14 +8,9 @@ module.exports = {
 
 
 async function UsernameIsUnique(req, res, next) {
-    try {
-        const users = await auth.findBy({ username: req.body.username })
-        if (!users.length) {
-            next()
-        } else next({ message: "username taken", status: 422 })
-    } catch (error) {
-        next(error)
-    }
+   const { username } = req.body;
+   let result = await auth.findBy({ username });
+   if(result) return res.status(400).json({message: "username taken"})
 }
 
 async function CheckUsernameExists(req, res, next) {

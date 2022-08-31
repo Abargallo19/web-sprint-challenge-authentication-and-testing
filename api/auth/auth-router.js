@@ -11,13 +11,17 @@ const { CheckUsernameExists, UsernameIsUnique, validateLogin } = require('../mid
 
 router.post('/register', validateLogin, UsernameIsUnique, async (req, res) => {
   try {
-    
+    const { id, username, password } = req.body;
+    const hash = bcrypt.hashSync(password, 8);
+    const user = { id, username, password: hash };
+    await auth.create(user);
+    res.status(201).json(user)
   } catch (error) {
 
   }
 
 
-  res.end('implement register, please!');
+  // res.end('implement register, please!');
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -45,7 +49,7 @@ router.post('/register', validateLogin, UsernameIsUnique, async (req, res) => {
   */
 });
 
-router.post('/login', restrict, validateLogin, CheckUsernameExists, async (req, res) => {
+router.post('/login', restrict, validateLogin, async (req, res) => {
   res.end('implement login, please!');
   /*
     IMPLEMENT
@@ -74,5 +78,6 @@ router.post('/login', restrict, validateLogin, CheckUsernameExists, async (req, 
 
   // res.status(200).json({message: `Welcome, ${req.body.username}`, token: token})
 });
+
 
 module.exports = router;

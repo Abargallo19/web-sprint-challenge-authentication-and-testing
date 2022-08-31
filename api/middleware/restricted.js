@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'shh';
 
-
-
-
-module.exports = (req, res, next) => {
+const restrict = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -19,7 +16,7 @@ module.exports = (req, res, next) => {
     next();
   })
 };
-
+module.exports = restrict;
 
 
 
