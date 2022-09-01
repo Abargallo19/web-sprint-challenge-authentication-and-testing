@@ -47,7 +47,7 @@ router.post('/register', shape, uniqueUsername, async (req, res, next) => {
     the response body should include a string exactly as follows: "username taken".
 */
 
-router.post('/login', getUsername, async (req, res, next) => {
+router.post('/login', shape, getUsername, async (req, res, next) => {
   const { body: { password }, user } = req;
   console.log(bcrypt.compareSync(password, user.password))
   try {
