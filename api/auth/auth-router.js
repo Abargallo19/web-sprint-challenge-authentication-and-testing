@@ -52,15 +52,16 @@ router.post('/login', shape, async (req, res, next) => {
   try {
     const { username, password } = req.user;
     const invalid = { message: 'invalid credentials' };
-    let result = await auth.findBy({ username });
-    if (!result || !bcrypt.compareSync(password, result.password)) return res.status(404).json(invalid);
+    let result = await auth.findBy( username );
+    if(!result) return res.status(404).json(message)
+    if (!bcrypt.compareSync(password, result.password)) return res.status(401).json(invalid);
     const token = newtoken(req.user);
     res.json({
       token,
       message: `welcome, ${username}`
     })
   } catch (err) {
-    next(err)
+    res.status(500)
   }
 
 });
