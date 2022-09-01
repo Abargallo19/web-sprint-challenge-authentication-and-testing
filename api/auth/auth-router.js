@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'shh';
 const auth = require('../auth/auth-model');
-const { uniqueUsername, shape, getUsername } = require('../middleware/validate');
+const { uniqueUsername, shape, getUsername, userCheck } = require('../middleware/validate');
 
 
 
@@ -47,7 +47,7 @@ router.post('/register', shape, uniqueUsername, async (req, res, next) => {
     the response body should include a string exactly as follows: "username taken".
 */
 
-router.post('/login', shape, getUsername, async (req, res, next) => {
+router.post('/login',  shape, userCheck, getUsername, async (req, res, next) => {
   const { body: { password }, user } = req;
   console.log(bcrypt.compareSync(password, user.password))
   try {

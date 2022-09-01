@@ -3,7 +3,8 @@ const auth = require('../auth/auth-model');
 module.exports = {
     uniqueUsername,
     shape,
-    getUsername
+    getUsername, 
+    userCheck
 };
 
 async function uniqueUsername(req, res, next) {
@@ -21,6 +22,13 @@ async function getUsername(req, res, next) {
     next()
 }
 
+
+async function userCheck(req, res, next){
+    const { username } = req.body;
+    let result = await auth.findBy({ username });
+    if (!result) return res.status(404).json({ message: 'invalid credentials' }) 
+    next()
+}
 
 function shape(req, res, next) {
     const { username, password } = req.body;
