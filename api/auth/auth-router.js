@@ -51,10 +51,12 @@ router.post('/login', shape, async (req, res, next) => {
 
   try {
     const { username, password } = req.user;
-    const invalid = { message: 'invalid credentials' };
+    
     let result = await auth.findBy( { username } );
-    if(!result) return res.status(404).json(message)
-    if (!bcrypt.compareSync(password, result.password)) return res.status(401).json(invalid);
+    console.log(result)
+    if(!result) return res.status(404).json({message: 'invalid credentials' })
+
+    if (!bcrypt.compareSync(password, result.password)) return res.status(401).json({message: 'invalid credentials' });
     const token = newtoken(req.user);
     res.json({
       token,
@@ -65,6 +67,14 @@ router.post('/login', shape, async (req, res, next) => {
   }
 
 });
+
+function newtoken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username
+  }
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '30m' });
+};
 
 /*
   IMPLEMENT
@@ -89,16 +99,4 @@ router.post('/login', shape, async (req, res, next) => {
   4- On FAILED login due to `username` not existing in the db, or `password` being incorrect,
     the response body should include a string exactly as follows: "invalid credentials".
 */
-
-
-// res.status(200).json({message: `Welcome, ${req.body.username}`, token: token})
-function newtoken(user) {
-  const payload = {
-    subject: user.id,
-    username: user.username
-  }
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '30m' })
-}
-
-
 module.exports = router;
