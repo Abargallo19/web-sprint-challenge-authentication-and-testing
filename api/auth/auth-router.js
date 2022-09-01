@@ -8,13 +8,14 @@ const { uniqueUsername, shape } = require('../middleware/validate');
 
 
 
-router.post('/register', uniqueUsername, shape, async (req, res, next) => {
+router.post('/register', shape, uniqueUsername, async (req, res, next) => {
   try {
-    const { id, username, password } = req.body;
+    const { username, password } = req.body;
     const hash = bcrypt.hashSync(password, 8);
-    const user = { id, username, password: hash };
-    await auth.create(user);
-    res.status(201).json(user)
+    const user = { username, password: hash };
+    const newUser = await auth.create(user);
+   
+    res.status(201).json(newUser)
   } catch (error) {
     next(error)
   }

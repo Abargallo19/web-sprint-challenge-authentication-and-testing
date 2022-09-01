@@ -6,20 +6,20 @@ module.exports = {
 };
 
 async function uniqueUsername(req, res, next) {
-    const { username }  = req.body;
-    let result = await auth.findBy({username});
-    if(result) return res.status(404).json({message: 'username taken'})
+    const { username } = req.body;
+    let result = await auth.findBy({ username });
+    if (result) return res.status(404).json({ message: 'username taken' })
     next()
 }
 
 function shape(req, res, next) {
-    const {username, password} = req.body;
-    if(!username || username.trim() === '' || !password || password.trim() === '') return res.status(404).json({message: "username and password required"})
-    req.user = {
-        username: username.trim(),
-        password: typeof password === 'number' ? password : password.trim()
-    }
-    next()
+    const { username, password } = req.body;
+    if (!username || !password) return res.status(400).json({ message: "username and password required" })
+    console.log('moving to next')
+    next();
+     
+
+
 }
 
 

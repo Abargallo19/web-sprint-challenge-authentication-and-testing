@@ -7,7 +7,7 @@ module.exports = {
 }
 
 function findBy(filter) {
-return db('users').where(filter).first();
+    return db('users').where(filter).first();
 
 }
 
@@ -16,6 +16,6 @@ function findById(id) {
 }
 
 async function create(user) {
-const [ id ] = await db('users').insert(user)
-return findById({id})
+    const [id] = await db('users').insert(user)
+    return findById(id)
 }
