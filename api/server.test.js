@@ -68,10 +68,10 @@ describe('Authenication Endpoints', () => {
     })
     test('requires both username and password', async () => {
       let result = await request(server).post(loginURL).send({username: 'L'});
-      expect(result.statusCode).toBe(404);
+      expect(result.statusCode).toBe(400);
       expect(result.body).toEqual(invalidUser);
       result = await request(server).post(loginURL).send({password: ''});
-      expect(result.statusCode).toBe(404);
+      expect(result.statusCode).toBe(400);
       expect(result.body).toEqual(invalidUser);
     })
     test('invalid if username does not exist', async () => {
