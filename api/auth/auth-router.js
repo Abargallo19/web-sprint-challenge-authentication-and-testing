@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'shh';
 const auth = require('../auth/auth-model');
-const { uniqueUsername, shape } = require('../middleware/validate');
+const { uniqueUsername, shape, getUsername } = require('../middleware/validate');
 
 
 
@@ -14,7 +14,7 @@ router.post('/register', shape, uniqueUsername, async (req, res, next) => {
     const hash = bcrypt.hashSync(password, 8);
     const user = { username, password: hash };
     const newUser = await auth.create(user);
-   
+
     res.status(201).json(newUser)
   } catch (error) {
     next(error)
@@ -47,24 +47,43 @@ router.post('/register', shape, uniqueUsername, async (req, res, next) => {
     the response body should include a string exactly as follows: "username taken".
 */
 
-router.post('/login', shape, async (req, res, next) => {
-
+router.post('/login', getUsername, async (req, res, next) => {
+  const { body: { password }, user } = req;
+  console.log(bcrypt.compareSync(password, user.password))
   try {
-    const { username, password } = req.user;
-    
-    let result = await auth.findBy( { username } );
-    console.log(result)
-    if(!result) return res.status(404).json({message: 'invalid credentials' })
+   
+    if (bcrypt.compareSync(password, user.password)) {
+      res.status(200).json({ message: `welcome, ${user.username}`, token: newtoken(user) })
+    }
+    else {
+      res.status(401).json({ message: "invalid credentials" })
+    }
 
-    if (!bcrypt.compareSync(password, result.password)) return res.status(401).json({message: 'invalid credentials' });
-    const token = newtoken(req.user);
-    res.json({
-      token,
-      message: `welcome, ${username}`
-    })
-  } catch (err) {
-    res.status(500)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
   }
+
+
+
+
+
+
+  // try {
+  //   const { username, password } = req.user;
+
+  //   let result = await auth.findBy( { username } );
+  //   console.log(result)
+  //   if(!result) return res.status(404).json({message: 'invalid credentials' })
+
+  //   if (!bcrypt.compareSync(password, result.password)) return res.status(401).json({message: 'invalid credentials' });
+  //   const token = newtoken(req.user);
+  //   res.json({
+  //     token,
+  //     message: `welcome, ${username}`
+  //   })
+  // } catch (err) {
+  //   res.status(500)
+  // }
 
 });
 
